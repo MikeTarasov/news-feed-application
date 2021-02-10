@@ -1,0 +1,30 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      jdbc:
+        batch_size: 10
+      order_inserts: true
+      order_updates: true
+      batch_versioned_data: true
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQL10Dialect
+  datasource:
+    url: jdbc:${POSTGRESQL.ADDON_TYPE}://${POSTGRESQL.ADDON_HOST}:${POSTGRESQL.ADDON_PORT}/${POSTGRESQL.ADDON_DB}?reconnect=true&verifyServerCertificate=false&useSSL=false&requireSSL=false&serverTimezone=${POSTGRESQL.ADDON_TIME_ZONE}
+    username: u2erevkenczw958tj99n
+    password: FM6LDeiOboM9pDXJxMuR
+    hikari:
+      maximum-pool-size: 1
+  flyway:
+    enabled: true
+
+POSTGRESQL:
+  ADDON_DB: bi26wswdm6fmil3p1tuz
+  ADDON_HOST: bi26wswdm6fmil3p1tuz-postgresql.services.clever-cloud.com
+  ADDON_PORT: 5432
+  ADDON_TYPE: postgresql
+  ADDON_TIME_ZONE: Europe/Moscow
+
+server:
+  port: { $PORT: 8080 }
