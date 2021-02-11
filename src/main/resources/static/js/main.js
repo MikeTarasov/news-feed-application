@@ -8,6 +8,7 @@ function put_news(id) {
             document.getElementById('news-id').setAttribute('value', id);
             document.getElementById('news-name').setAttribute('value', response.name);
             document.getElementById('news-text').setAttribute('value', response.text);
+            document.getElementById('category').setAttribute('value', response.category);
         },
         error: function (response) {
             if (response.status === 404) {
@@ -143,7 +144,7 @@ $(function () {
         });
         $(this)[0].reset;
         setTimeout(function () {
-            // location.reload();
+            location.reload();
         }, 100);
         return false;
     });
@@ -151,7 +152,7 @@ $(function () {
     //Edit news
     $('#put-news-save').click(function () {
         const data = $('#put-news-form form').serialize();
-        // const id = document.getElementById('news-id').value;
+        const id = document.getElementById('news-id').value;
         $.ajax({
             method: "PUT",
             url: '/news/' + id,
@@ -163,7 +164,7 @@ $(function () {
         });
         $(this)[0].reset;
         setTimeout(function () {
-            // location.reload();
+            location.reload();
         }, 100);
         return false;
     });

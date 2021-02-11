@@ -35,8 +35,8 @@ public class NewsService {
         return new PostPutNewsRequest(request.get("name"), request.get("text"), request.get("category"));
     }
 
-    private ResponseEntity<NewsResponse> notFound() {
-        return ResponseEntity.status(404).body(null);
+    private ResponseEntity<NewsResponse> notFound(String message) {
+        return ResponseEntity.status(404).body(new NewsResponse(message));
     }
 
     private Category createNewCategory(String name) {
@@ -52,52 +52,55 @@ public class NewsService {
     public ResponseEntity<?> getNewsById(long id) {
         return newsRepository.findById(id)
                 .map(news -> ResponseEntity.status(200).body(convertToResponse(news)))
-                .orElseGet(this::notFound);
+                .orElseGet(() -> notFound("News"));
     }
 
     public ResponseEntity<?> postNewsAdd(Map<String, String> requestBody) {
+        return postPutNews(0L, requestBody, "post");
+    }
+
+    public ResponseEntity<?> putNewsEditId(long newsId, Map<String, String> requestBody) {
+        return postPutNews(newsId, requestBody, "put");
+    }
+
+    private ResponseEntity<?> postPutNews(long newsId, Map<String, String> requestBody, String type) {
         PostPutNewsRequest request = convertMap(requestBody);
 
         String categoryName = request.getCategory();
-        if (categoryName == null || categoryName.equals("")) return notFound();
+        if (categoryName == null || categoryName.equals("")) return notFound("Category");
 
         Category category = categoryRepository.findCategoryByName(categoryName);
         if (category == null) category = createNewCategory(categoryName);
 
-        News news = new News(request.getTitle(), request.getText(), category);
+        News news = new News();
+        switch (type) {
+            case "put":
+                Optional<News> optionalNews = newsRepository.findById(newsId);
+                if (optionalNews.isEmpty()) return notFound("News");
+                news = optionalNews.get();
+
+                news.setName(request.getTitle());
+                news.setText(request.getText());
+                news.setDate(LocalDateTime.now());
+                news.setCategory(category);
+                break;
+            case "post":
+                news = new News(request.getTitle(), request.getText(), category);
+                break;
+        }
+
         newsRepository.saveAndFlush(news);
 
-        return ResponseEntity.status(200).body("ok");
+        return ResponseEntity.status(200).body(news.getId());
     }
 
     public ResponseEntity<?> deleteNewsId(long id) {
         Optional<News> optionalNews = newsRepository.findById(id);
-        if (optionalNews.isEmpty()) return notFound();
+        if (optionalNews.isEmpty()) return notFound("News");
 
         newsRepository.delete(optionalNews.get());
 
         return ResponseEntity.status(200).body("ok");
-    }
-
-    public ResponseEntity<?> putNewsEditId(long newsId, Map<String, String> requestBody) {
-        PostPutNewsRequest request = convertMap(requestBody);
-
-        String categoryName = request.getCategory();
-        if (categoryName == null || categoryName.equals("")) return notFound();
-
-        Category category = categoryRepository.findCategoryByName(categoryName);
-        if (category == null) category = createNewCategory(categoryName);
-
-        Optional<News> optionalNews = newsRepository.findById(newsId);
-        if (optionalNews.isEmpty()) return notFound();
-
-        News news = optionalNews.get();
-        news.setName(request.getTitle());
-        news.setText(request.getText());
-        news.setDate(LocalDateTime.now());
-        news.setCategory(category);
-
-        return ResponseEntity.status(200).body(news.getId());
     }
 
 
