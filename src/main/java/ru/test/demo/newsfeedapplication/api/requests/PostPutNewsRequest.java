@@ -11,4 +11,5 @@ public class PostPutNewsRequest {
 
     private String title;
     private String text;
+    private String category;
 }

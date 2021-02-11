@@ -1,6 +1,6 @@
 //Show putting news form
 function put_news(id) {
-    $('#news-put-form').css('display', 'flex');
+    $('#put-news-form').css('display', 'flex');
     $.ajax({
         method: "GET",
         url: '/news/' + id,
@@ -71,8 +71,8 @@ $(function () {
             method: "GET",
             url: '/news/' + newsId,
             success: function (response) {
-                const code = '<span><br>Текст новости ' + response.text +
-                    '<br></span>';
+                const code = '<br>' + response.text +
+                    '<br>';
                 if (count === 0) {
                     link.parent().append(code);
                     count++;
@@ -134,7 +134,7 @@ $(function () {
         const data = $('#add-news-form form').serialize();
         $.ajax({
             method: "POST",
-            url: '/news/',
+            url: '/news/add',
             data: data,
             context: this,
             success: function (response) {
@@ -143,15 +143,15 @@ $(function () {
         });
         $(this)[0].reset;
         setTimeout(function () {
-            location.reload();
+            // location.reload();
         }, 100);
         return false;
     });
 
     //Edit news
-    $('#put-news').click(function () {
+    $('#put-news-save').click(function () {
         const data = $('#put-news-form form').serialize();
-        const id = document.getElementById('news-id').value;
+        // const id = document.getElementById('news-id').value;
         $.ajax({
             method: "PUT",
             url: '/news/' + id,
@@ -163,7 +163,7 @@ $(function () {
         });
         $(this)[0].reset;
         setTimeout(function () {
-            location.reload();
+            // location.reload();
         }, 100);
         return false;
     });

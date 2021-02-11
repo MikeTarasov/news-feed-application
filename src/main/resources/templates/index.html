@@ -8,13 +8,15 @@
     <link href="/css/styles.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-<div id="add-news-form">
+<div enctype="application/json" id="add-news-form">
     <form>
         <h2>Добавление новости</h2>
         <label>Заголовок:</label>
         <input name="name" type="text" value="">
         <label>Текст:</label>
         <input name="text" type="text" value="">
+        <label>Категория:</label>
+        <input name="category" type="text" value="">
         <hr>
         <button id="save-news">Сохранить</button>
     </form>
@@ -28,7 +30,7 @@
         <label for="news-text">Текст:</label>
         <input id="news-text" name="text" type="text">
         <hr>
-        <button id="put-news">Сохранить изменения</button>
+        <button id="put-news-save">Сохранить изменения</button>
     </form>
 </div>
 <h1>Лента новостей:</h1>
@@ -38,8 +40,10 @@
            th:text="${category.name} "></a>
     </a>
 </div>
+<br>
 <label for="search"><br>Поиск:</label><input id="search" type="text">
-<button id="show-add-news-form">Добавить задачу</button>
+<br><br>
+<button id="show-add-news-form">Добавить новость</button>
 <br><br>
 <div id="all-news-list">
     <ul th:each="news : ${all_news}">
