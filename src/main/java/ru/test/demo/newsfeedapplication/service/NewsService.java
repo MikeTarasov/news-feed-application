@@ -1,9 +1,13 @@
 package ru.test.demo.newsfeedapplication.service;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import ru.test.demo.newsfeedapplication.model.entities.News;
 import ru.test.demo.newsfeedapplication.model.repositories.CategoryRepository;
 import ru.test.demo.newsfeedapplication.model.repositories.NewsRepository;
+
+import java.util.List;
 
 @Service
 public class NewsService {
@@ -15,6 +19,10 @@ public class NewsService {
                        NewsRepository newsRepository) {
         this.categoryRepository = categoryRepository;
         this.newsRepository = newsRepository;
+    }
+
+    public List<News> getAllNews() {
+        return newsRepository.findAll(Sort.by("date").descending());
     }
 
     public ResponseEntity<?> getNewsAll() {

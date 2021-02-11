@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ToDo List</title>
+    <script src="/js/jquery-3.4.0.min.js"></script>
+    <script src="/js/main.js"></script>
+    <link href="/css/styles.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<div id="add-news-form">
+    <form>
+        <h2>Добавление новости</h2>
+        <label>Заголовок:</label>
+        <input name="name" type="text" value="">
+        <label>Текст:</label>
+        <input name="text" type="text" value="">
+        <hr>
+        <button id="save-news">Сохранить</button>
+    </form>
+</div>
+<div id="put-news-form">
+    <form>
+        <h2>Изменение задачи</h2>
+        <input hidden id="news-id" name="id" type="number">
+        <label for="news-name">Заголовок:</label>
+        <input id="news-name" name="name" type="text">
+        <label for="news-text">Текст:</label>
+        <input id="news-text" name="text" type="text">
+        <hr>
+        <button id="put-news">Сохранить изменения</button>
+    </form>
+</div>
+<h1>Лента новостей:</h1>
+<div id="categories-list">
+    <a th:each="category : ${all_categories}">
+        <a class="category-news-link" href="/category/" th:attr="data-id=${category.id}"
+           th:text="${category.name} "></a>
+    </a>
+</div>
+<label for="search"><br>Поиск:</label><input id="search" type="text">
+<button id="show-add-news-form">Добавить задачу</button>
+<br><br>
+<div id="all-news-list">
+    <ul th:each="news : ${all_news}">
+        <a th:text="${news.date} "></a>
+        <a class="news-link" href="#" th:attr="data-id=${news.id}" th:text="${news.name}"></a>
+        <input th:onclick="'put_news(' + ${news.id} + ')'" type="button" value="Изменить новость">
+        <input th:onclick="'delete_news(' + ${news.id} + ')'" type="button" value="Удалить новость">
+    </ul>
+</div>
+</body>
+</html>
