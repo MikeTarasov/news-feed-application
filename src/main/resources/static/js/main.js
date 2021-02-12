@@ -100,6 +100,11 @@ $(function () {
             method: "GET",
             url: '/category/' + categoryId,
             success: function (response) {
+                location.reload();
+                window.document.write(response);
+                // $(this).load(response);
+                // link.parent().replaceAll(response);
+                // link.parent().replaceWith(response);
             },
             error: function (response) {
                 if (response.status === 404) {

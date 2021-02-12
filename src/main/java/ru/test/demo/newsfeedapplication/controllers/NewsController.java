@@ -27,17 +27,16 @@ public class NewsController {
         return newsService.postNewsAdd(request);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteNewsId(@PathVariable long id) {
-        return newsService.deleteNewsId(id);
-    }
-
     @PutMapping("/{id}")
     public ResponseEntity<?> putNewsEditId(@PathVariable("id") long newsId,
                                            @RequestParam Map<String, String> request) {
         return newsService.putNewsEditId(newsId, request);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteNewsId(@PathVariable long id) {
+        return newsService.deleteNewsId(id);
+    }
 
     @GetMapping("/news/search")
     public ResponseEntity<?> getNewsSearch(@RequestParam String text,

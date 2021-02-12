@@ -1,10 +1,12 @@
 package ru.test.demo.newsfeedapplication.controllers;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.test.demo.newsfeedapplication.service.CategoryService;
 
-@RestController
+@Controller
 @RequestMapping("/category")
 public class CategoryController {
 
@@ -15,8 +17,8 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getCategoryId(@PathVariable long id) {
-        return categoryService.getCategoryId();
+    public String getCategoryId(@PathVariable long id, Model model) {
+        return categoryService.getCategoryId(id, model);
     }
 
     @GetMapping("/all")

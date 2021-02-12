@@ -45,6 +45,12 @@ public class NewsService {
         return category;
     }
 
+    private void deleteEmptyCategory(Category category) {
+        if (newsRepository.findByCategory(category).size() == 0) {
+            categoryRepository.delete(category);
+        }
+    }
+
     public List<News> getAllNews() {
         return newsRepository.findAll(Sort.by("date").descending());
     }
@@ -73,6 +79,7 @@ public class NewsService {
         if (category == null) category = createNewCategory(categoryName);
 
         News news = new News();
+        Category oldCategory = null;
         switch (type) {
             case "put":
                 Optional<News> optionalNews = newsRepository.findById(newsId);
@@ -82,6 +89,7 @@ public class NewsService {
                 news.setName(request.getTitle());
                 news.setText(request.getText());
                 news.setDate(LocalDateTime.now());
+                oldCategory = news.getCategory();
                 news.setCategory(category);
                 break;
             case "post":
@@ -90,6 +98,7 @@ public class NewsService {
         }
 
         newsRepository.saveAndFlush(news);
+        if (oldCategory != null) deleteEmptyCategory(oldCategory);
 
         return ResponseEntity.status(200).body(news.getId());
     }
@@ -98,7 +107,9 @@ public class NewsService {
         Optional<News> optionalNews = newsRepository.findById(id);
         if (optionalNews.isEmpty()) return notFound("News");
 
-        newsRepository.delete(optionalNews.get());
+        News news = optionalNews.get();
+        newsRepository.delete(news);
+        deleteEmptyCategory(news.getCategory());
 
         return ResponseEntity.status(200).body("ok");
     }

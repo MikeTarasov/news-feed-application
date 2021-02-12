@@ -35,7 +35,7 @@
         <button id="put-news-save">Сохранить изменения</button>
     </form>
 </div>
-<h1>Лента новостей<span th:text="${current_category}"></span>:</h1>
+<h1>Лента новостей(<span th:text="${current_category}"></span>):</h1>
 <div id="categories-list">
     <a th:each="category : ${all_categories}">
         <a class="category-news-link" href="/category/" th:attr="data-id=${category.id}"
@@ -50,7 +50,7 @@
 <div id="all-news-list">
     <ul th:each="news : ${all_news}">
         <a th:text="${news.date} "></a>
-        <a class="news-link" style="text-decoration: underline" th:attr="data-id=${news.id}" th:text="${news.name}"></a>
+        <a class="news-link" href="#" th:attr="data-id=${news.id}" th:text="${news.name}"></a>
         <input th:onclick="'put_news(' + ${news.id} + ')'" type="button" value="Изменить новость">
         <input th:onclick="'delete_news(' + ${news.id} + ')'" type="button" value="Удалить новость">
     </ul>
