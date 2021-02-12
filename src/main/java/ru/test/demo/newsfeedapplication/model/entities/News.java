@@ -4,7 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @NoArgsConstructor
@@ -20,7 +20,7 @@ public class News {
 
     private String text;
 
-    private LocalDateTime date;
+    private Date date;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
@@ -29,7 +29,7 @@ public class News {
     public News(String name, String text, Category category) {
         this.name = name;
         this.text = text;
-        this.date = LocalDateTime.now();
+        this.date = new Date(System.currentTimeMillis());
         this.category = category;
     }
 }

@@ -102,9 +102,6 @@ $(function () {
             success: function (response) {
                 location.reload();
                 window.document.write(response);
-                // $(this).load(response);
-                // link.parent().replaceAll(response);
-                // link.parent().replaceWith(response);
             },
             error: function (response) {
                 if (response.status === 404) {
@@ -117,13 +114,16 @@ $(function () {
     });
 
     //Search news by pattern
-    $(document).on('click', '.search', function () {
-        const link = $(this);
-        const text = link.data('text');
+    $('#search-button').click(function () {
+        const text = document.getElementById("text").value;
+        const data = {'text': text};
         $.ajax({
             method: "GET",
-            url: '/search/' + text,
+            url: '/news/search',
+            data: data,
             success: function (response) {
+                location.reload();
+                window.document.write(response)
             },
             error: function (response) {
                 if (response.status === 404) {
@@ -145,6 +145,7 @@ $(function () {
             context: this,
             success: function (response) {
                 $('#add-news-form').css('display', 'none');
+                location.reload();
             }
         });
         $(this)[0].reset;
@@ -165,6 +166,7 @@ $(function () {
             context: this,
             success: function (response) {
                 $('#put-news-form').css('display', 'none');
+                location.reload();
             }
         });
         $(this)[0].reset;

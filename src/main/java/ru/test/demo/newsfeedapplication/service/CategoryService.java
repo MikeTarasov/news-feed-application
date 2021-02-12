@@ -1,14 +1,14 @@
 package ru.test.demo.newsfeedapplication.service;
 
 import org.springframework.data.domain.Sort;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
+import ru.test.demo.newsfeedapplication.api.responses.NewsResponse;
 import ru.test.demo.newsfeedapplication.model.entities.Category;
-import ru.test.demo.newsfeedapplication.model.entities.News;
 import ru.test.demo.newsfeedapplication.model.repositories.CategoryRepository;
 import ru.test.demo.newsfeedapplication.model.repositories.NewsRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,28 +34,14 @@ public class CategoryService {
         Category category = optionalCategory.get();
 
         List<Category> allCategories = getAllCategories();
-        List<News> categoryNews = newsRepository.findByCategory(category);
+        List<NewsResponse> categoryNews = new ArrayList<>();
+        newsRepository.findByCategory(category)
+                .forEach(news -> categoryNews.add(new NewsResponse(news)));
 
         model.addAttribute("current_category", " категории ".concat(category.getName()));
         model.addAttribute("all_categories", allCategories);
         model.addAttribute("all_news", categoryNews);
 
         return "index";
-    }
-
-    public ResponseEntity<?> getCategoryAll() {
-        return null;
-    }
-
-    public ResponseEntity<?> postCategoryAdd() {
-        return null;
-    }
-
-    public ResponseEntity<?> putCategoryId() {
-        return null;
-    }
-
-    public ResponseEntity<?> deleteCategoryId() {
-        return null;
     }
 }

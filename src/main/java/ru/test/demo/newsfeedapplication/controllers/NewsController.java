@@ -1,12 +1,14 @@
 package ru.test.demo.newsfeedapplication.controllers;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.test.demo.newsfeedapplication.service.NewsService;
 
 import java.util.Map;
 
-@RestController
+@Controller
 @RequestMapping("/news")
 public class NewsController {
 
@@ -38,17 +40,8 @@ public class NewsController {
         return newsService.deleteNewsId(id);
     }
 
-    @GetMapping("/news/search")
-    public ResponseEntity<?> getNewsSearch(@RequestParam String text,
-                                           @RequestParam(defaultValue = "0") int offset,
-                                           @RequestParam(defaultValue = "10") int limit,
-                                           @RequestParam(defaultValue = "all") String period) {
-        return newsService.getNewsSearch();
+    @GetMapping("/search")
+    public String getNewsSearch(@RequestParam String text, Model model) {
+        return newsService.getNewsSearch(text, model);
     }
-
-
-
-
-
-
 }

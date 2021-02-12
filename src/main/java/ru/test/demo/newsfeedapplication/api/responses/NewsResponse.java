@@ -6,7 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.test.demo.newsfeedapplication.model.entities.News;
 
-import java.time.LocalDateTime;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 @Data
 @AllArgsConstructor
@@ -17,15 +18,16 @@ public class NewsResponse {
     private long id;
     private String name;
     private String text;
-    private LocalDateTime date;
+    private String date;
     private String category;
     private String message;
 
     public NewsResponse(News news) {
+        DateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         this.id = news.getId();
         this.name = news.getName();
         this.text = news.getText();
-        this.date = news.getDate();
+        this.date = simpleDateFormat.format(news.getDate());
         this.category = news.getCategory().getName();
     }
 

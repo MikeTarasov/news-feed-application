@@ -6,11 +6,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import ru.test.demo.newsfeedapplication.api.responses.NewsResponse;
 import ru.test.demo.newsfeedapplication.model.entities.Category;
-import ru.test.demo.newsfeedapplication.model.entities.News;
 import ru.test.demo.newsfeedapplication.service.CategoryService;
 import ru.test.demo.newsfeedapplication.service.NewsService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -28,7 +29,8 @@ public class DefaultController {
     public String index(Model model) {
 
         List<Category> allCategories = categoryService.getAllCategories();
-        List<News> allNews = newsService.getAllNews();
+        List<NewsResponse> allNews = new ArrayList<>();
+        newsService.getAllNews().forEach(news -> allNews.add(new NewsResponse(news)));
 
         model.addAttribute("current_category", "");
         model.addAttribute("all_categories", allCategories);
