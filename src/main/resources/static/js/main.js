@@ -116,7 +116,8 @@ $(function () {
     //Search news by pattern
     $('#search-button').click(function () {
         const text = document.getElementById("text").value;
-        const data = {'text': text};
+        const category = document.getElementById("select-category").value;
+        const data = {'text': text, 'category': category};
         $.ajax({
             method: "GET",
             url: '/news/search',

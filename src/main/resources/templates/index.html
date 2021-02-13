@@ -69,6 +69,14 @@
     <form>
         <label for="text"></label>
         <input id="text" type="text">
+
+        <label for="select-category"></label>
+        <select id="select-category" name="category">
+            <option value=" ">Выберите категорию</option>
+            <option th:each="category : ${all_categories}" th:text="${category.name}"
+                    th:value="${category.name}"></option>
+        </select>
+
         <button id="search-button">Поиск</button>
     </form>
 </div>

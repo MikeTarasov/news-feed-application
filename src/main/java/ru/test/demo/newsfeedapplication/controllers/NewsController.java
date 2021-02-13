@@ -41,7 +41,9 @@ public class NewsController {
     }
 
     @GetMapping("/search")
-    public String getNewsSearch(@RequestParam String text, Model model) {
-        return newsService.getNewsSearch(text, model);
+    public String getNewsSearch(@RequestParam String text,
+                                @RequestParam String category,
+                                Model model) {
+        return newsService.getNewsSearch(text, category, model);
     }
 }

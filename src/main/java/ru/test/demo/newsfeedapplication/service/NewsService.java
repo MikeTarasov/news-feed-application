@@ -139,14 +139,21 @@ public class NewsService {
     }
 
 
-    public String getNewsSearch(String text, Model model) {
+    public String getNewsSearch(String text, String categoryName, Model model) {
         List<NewsResponse> findNews = new ArrayList<>();
         List<Category> allCategories = categoryService.getAllCategories();
 
-        newsRepository.searchInNameAndText("%".concat(text).concat("%"))
-                .forEach(news -> findNews.add(new NewsResponse(news)));
+        if (categoryName.equals(" ")) {
+            newsRepository.searchInNameAndText("%".concat(text).concat("%"))
+                    .forEach(news -> findNews.add(new NewsResponse(news)));
+        } else {
+            newsRepository.searchInNameAndTextInCategory(
+                    "%".concat(text).concat("%"), categoryRepository.findCategoryByName(categoryName))
+                    .forEach(news -> findNews.add(new NewsResponse(news)));
+            categoryName = " в категории ".concat(categoryName);
+        }
 
-        model.addAttribute("current_category", null);
+        model.addAttribute("current_category", categoryName);
         model.addAttribute("all_categories", allCategories);
         model.addAttribute("all_news", findNews);
 

@@ -16,4 +16,8 @@ public interface NewsRepository extends JpaRepository<News, Long> {
     @Query("select n from News n where lower(n.name) like lower(:text) or lower(n.text) like lower(:text) " +
             "order by n.date desc")
     List<News> searchInNameAndText(String text);
+
+    @Query("select n from News n where (lower(n.name) like lower(:text) or lower(n.text) like lower(:text)) " +
+            "and n.category = :category order by n.date desc")
+    List<News> searchInNameAndTextInCategory(String text, Category category);
 }
