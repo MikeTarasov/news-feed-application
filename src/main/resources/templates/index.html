@@ -11,12 +11,21 @@
 <div id="add-news-form">
     <form>
         <h2>Добавление новости</h2>
-        <label>Заголовок:</label>
-        <input name="name" type="text" value="">
-        <label>Текст:</label>
-        <input name="text" type="text" value="">
-        <label>Категория:</label>
-        <input name="category" type="text" value="">
+
+        <label for="add-name"><b>Заголовок:</b></label>
+        <input class="add-name" id="add-name" name="name" required="required" type="text" value="">
+        <style>input.add-name {
+            width: 270px;
+        }</style>
+
+        <label for="add-text"><b>Текст:</b></label>
+        <textarea cols="40" id="add-text" name="text" required="required" rows="3"></textarea>
+
+        <label for="add-category"><b>Категория:</b></label>
+        <input class="add-category" id="add-category" name="category" required="required" type="text" value="">
+        <style>input.add-category {
+            width: 270px;
+        }</style>
         <hr>
         <button id="save-news">Сохранить</button>
     </form>
@@ -24,13 +33,26 @@
 <div id="put-news-form">
     <form>
         <h2>Изменение задачи</h2>
+
         <input hidden id="news-id" name="id" type="number">
+
         <label for="news-name">Заголовок:</label>
-        <input id="news-name" name="name" type="text">
+        <input class="put-name" id="news-name" name="name" required="required" type="text">
+        <style>input.put-name {
+            width: 270px;
+        }</style>
+
         <label for="news-text">Текст:</label>
-        <input id="news-text" name="text" type="text">
+        <input class="put-text" id="news-text" name="text" required="required" type="text">
+        <style>input.put-text {
+            width: 270px;
+        }</style>
+
         <label for="category">Категория:</label>
-        <input id="category" name="category" type="text" value="">
+        <input class="put-category" id="category" name="category" required="required" type="text">
+        <style>input.put-category {
+            width: 270px;
+        }</style>
         <hr>
         <button id="put-news-save">Сохранить изменения</button>
     </form>
@@ -51,14 +73,23 @@
     </form>
 </div>
 <br><br>
-<button id="show-add-news-form">Добавить новость</button>
-<br><br>
+<th:block th:unless="${current_category}">
+    <button id="show-add-news-form">Добавить новость</button>
+    <br><br>
+</th:block>
+
 <div id="all-news-list">
     <ul th:each="news : ${all_news}">
-        <a th:text="${news.date} "></a>
         <a class="news-link" style="text-decoration: underline" th:attr="data-id=${news.id}" th:text="${news.name}"></a>
-        <input th:onclick="'put_news(' + ${news.id} + ')'" type="button" value="Изменить новость">
-        <input th:onclick="'delete_news(' + ${news.id} + ')'" type="button" value="Удалить новость">
+        <th:block th:unless="${current_category}">
+            <input th:onclick="'put_news(' + ${news.id} + ')'" type="button" value="Изменить новость">
+            <input th:onclick="'delete_news(' + ${news.id} + ')'" type="button" value="Удалить новость">
+        </th:block>
+        <th:block th:if="${current_category}">
+            <li th:text="'Категория: ' + ${news.category}"></li>
+            <li th:text="'Дата: ' + ${news.date}"></li>
+            <li th:text="'Текст новости: ' + ${news.text}"></li>
+        </th:block>
     </ul>
 </div>
 </body>

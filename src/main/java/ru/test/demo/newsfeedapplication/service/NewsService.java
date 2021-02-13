@@ -39,8 +39,8 @@ public class NewsService {
     }
 
 
-    private ResponseEntity<NewsResponse> notFound(String message) {
-        return ResponseEntity.status(404).body(new NewsResponse(message));
+    private ResponseEntity<NewsResponse> notFound(String message, int code) {
+        return ResponseEntity.status(code).body(new NewsResponse(message));
     }
 
 
@@ -66,7 +66,7 @@ public class NewsService {
     public ResponseEntity<?> getNewsById(long id) {
         return newsRepository.findById(id)
                 .map(news -> ResponseEntity.status(200).body(convertToResponse(news)))
-                .orElseGet(() -> notFound("News"));
+                .orElseGet(() -> notFound("News", 404));
     }
 
 
@@ -83,8 +83,14 @@ public class NewsService {
     private ResponseEntity<?> postPutNews(long newsId, Map<String, String> requestBody, String type) {
         PostPutNewsRequest request = convertMap(requestBody);
 
+        String title = request.getTitle();
+        String text = request.getText();
         String categoryName = request.getCategory();
-        if (categoryName == null || categoryName.equals("")) return notFound("Category");
+
+        if (title == null || text == null || categoryName == null ||
+                title.equals("") || text.equals("") || categoryName.equals("")) {
+            return notFound("All the fields are required!", 400);
+        }
 
         Category category = categoryRepository.findCategoryByName(categoryName);
         if (category == null) category = createNewCategory(categoryName);
@@ -94,22 +100,26 @@ public class NewsService {
         switch (type) {
             case "put":
                 Optional<News> optionalNews = newsRepository.findById(newsId);
-                if (optionalNews.isEmpty()) return notFound("News");
+                if (optionalNews.isEmpty()) {
+                    return notFound("News", 404);
+                }
                 news = optionalNews.get();
 
-                news.setName(request.getTitle());
-                news.setText(request.getText());
+                news.setName(title);
+                news.setText(text);
                 news.setDate(new Date(System.currentTimeMillis()));
                 oldCategory = news.getCategory();
                 news.setCategory(category);
                 break;
             case "post":
-                news = new News(request.getTitle(), request.getText(), category);
+                news = new News(title, text, category);
                 break;
         }
 
         newsRepository.saveAndFlush(news);
-        if (oldCategory != null) deleteEmptyCategory(oldCategory);
+        if (oldCategory != null) {
+            deleteEmptyCategory(oldCategory);
+        }
 
         return ResponseEntity.status(200).body(news.getId());
     }
@@ -117,7 +127,9 @@ public class NewsService {
 
     public ResponseEntity<?> deleteNewsId(long id) {
         Optional<News> optionalNews = newsRepository.findById(id);
-        if (optionalNews.isEmpty()) return notFound("News");
+        if (optionalNews.isEmpty()) {
+            return notFound("News", 404);
+        }
 
         News news = optionalNews.get();
         newsRepository.delete(news);
@@ -134,7 +146,7 @@ public class NewsService {
         newsRepository.searchInNameAndText("%".concat(text).concat("%"))
                 .forEach(news -> findNews.add(new NewsResponse(news)));
 
-        model.addAttribute("current_category", "");
+        model.addAttribute("current_category", null);
         model.addAttribute("all_categories", allCategories);
         model.addAttribute("all_news", findNews);
 

@@ -72,8 +72,8 @@ $(function () {
             method: "GET",
             url: '/news/' + newsId,
             success: function (response) {
-                const code = '<br>' + response.text +
-                    '<br>';
+                const code = '<br>Категория: ' + response.category + '<br>Дата: ' + response.date
+                    + '<br>Текст новости: ' + response.text + '<br>';
                 if (count === 0) {
                     link.parent().append(code);
                     count++;

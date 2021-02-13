@@ -32,7 +32,7 @@ public class DefaultController {
         List<NewsResponse> allNews = new ArrayList<>();
         newsService.getAllNews().forEach(news -> allNews.add(new NewsResponse(news)));
 
-        model.addAttribute("current_category", "");
+        model.addAttribute("current_category", null);
         model.addAttribute("all_categories", allCategories);
         model.addAttribute("all_news", allNews);
 
